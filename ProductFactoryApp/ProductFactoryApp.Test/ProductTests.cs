@@ -22,8 +22,15 @@ public class ProductTests
     [Fact]
     public void Electronics_Initialized_ShouldBeInitializedCorrectly()
     {
-        // TODO: Complete test
-        Assert.True(true);
+        var name = "Test Electronic";
+        var price = 39.99m;
+
+        var electronic = new Electronics(name, price);
+
+        Assert.NotNull(electronic);
+        Assert.Equal(name, electronic.Name);
+        Assert.Equal(price, electronic.Price);
+        Assert.Equal(Category.Electronics, electronic.Category);
     }
 
     [Fact]
