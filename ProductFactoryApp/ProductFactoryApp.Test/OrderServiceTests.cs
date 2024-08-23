@@ -48,6 +48,57 @@ public class OrderServiceTests
 
         return (category, product);
     }
+    
+    [Fact]
+    public void AddProduct_MultipleProducts_ShouldAddAllProductsToOrder()
+    {
+        var products = GetMultipleProducts();
 
-    // TODO: Add for multiple
+        foreach (var product in products)
+        {
+            _orderService.AddProduct(product.product);
+        }
+
+        foreach (var (productCategory, product) in products)
+        {
+            Assert.Contains(_orderService.GetProducts(), p =>
+                p.GetCategory() == productCategory &&
+                p.GetName() == product.GetName() &&
+                p.GetPrice() == product.GetPrice());
+        }
+    }
+
+    [Fact]
+    public void RemoveProduct_MultipleProducts_ShouldRemoveAllProductsFromOrder()
+    {
+        var products = GetMultipleProducts();
+
+        foreach (var product in products)
+        {
+            _orderService.AddProduct(product.product);
+        }
+
+        foreach (var (productCategory, product) in products)
+        {
+            _orderService.RemoveProduct(product);
+        }
+
+        foreach (var (productCategory, product) in products)
+        {
+            Assert.DoesNotContain(_orderService.GetProducts(), p =>
+                p.GetCategory() == productCategory &&
+                p.GetName() == product.GetName() &&
+                p.GetPrice() == product.GetPrice());
+        }
+    }
+
+    public List<(Category category, IProduct product)> GetMultipleProducts()
+    {
+        return new List<(Category category, IProduct product)>
+        {
+            (Category.Book, ProductsMock.GetProduct(Category.Book)),
+            (Category.Electronics, ProductsMock.GetProduct(Category.Electronics)),
+            (Category.Furniture, ProductsMock.GetProduct(Category.Furniture))
+        };
+    }
 }
