@@ -49,5 +49,42 @@ public class OrderServiceTests
         return (category, product);
     }
 
-    // TODO: Add for multiple
+    [Fact]
+    public void AddProduct_MultipleProducts_ShouldAddAllProductsToOrder()
+    {
+        var book = ProductsMock.GetProduct(Category.Book);
+        var electronics = ProductsMock.GetProduct(Category.Electronics);
+        var furniture = ProductsMock.GetProduct(Category.Furniture);
+
+        _orderService.AddProduct(book);
+        _orderService.AddProduct(electronics);
+        _orderService.AddProduct(furniture);
+
+        var products = _orderService.GetProducts();
+
+        Assert.Contains(products, p => p.GetName() == book.GetName() && p.GetCategory() == Category.Book);
+        Assert.Contains(products, p => p.GetName() == electronics.GetName() && p.GetCategory() == Category.Electronics);
+        Assert.Contains(products, p => p.GetName() == furniture.GetName() && p.GetCategory() == Category.Furniture);
+    }
+
+    [Fact]
+    public void RemoveProduct_MultipleProducts_ShouldRemoveAllProductsFromOrder()
+    {
+        var book = GetProduct(Category.Book).product;
+        var electronics = GetProduct(Category.Electronics).product;
+        var furniture = GetProduct(Category.Furniture).product;
+
+        _orderService.AddProduct(book);
+        _orderService.AddProduct(electronics);
+        _orderService.AddProduct(furniture);
+
+        _orderService.RemoveProduct(book);
+        _orderService.RemoveProduct(electronics);
+        _orderService.RemoveProduct(furniture);
+
+        Assert.DoesNotContain(_orderService.GetProducts(), product => product.GetCategory() == Category.Book);
+        Assert.DoesNotContain(_orderService.GetProducts(), product => product.GetCategory() == Category.Electronics);
+        Assert.DoesNotContain(_orderService.GetProducts(), product => product.GetCategory() == Category.Furniture);
+    }
+
 }
