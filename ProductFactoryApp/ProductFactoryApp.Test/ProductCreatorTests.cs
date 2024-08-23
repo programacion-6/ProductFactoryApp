@@ -6,6 +6,13 @@ using ProductFactoryApp.Enums;
 
 public class ProductCreatorTests
 {
+    private readonly ProductCreator _creator;
+
+    public ProductCreatorTests()
+    {
+        _creator = new ProductCreator();
+    }
+
     [Theory]
     [InlineData("Test Book", 29.99, Category.Book, typeof(Book))]
     [InlineData("Test Electronics", 999.99, Category.Electronics, typeof(Electronics))]
@@ -22,5 +29,49 @@ public class ProductCreatorTests
         Assert.Equal(category, product.GetCategory());
     }
 
-    // TODO: Negative Scenarios 2
+    [Fact]
+    public void CreateProduct_UnknownCategory_ShouldThrowArgumentException()
+    {
+        var unknownCategory = (Category)999; // Una categoría que no existe
+
+        Assert.Throws<ArgumentException>(() => _creator.CreateProduct("Test Product", 10.00m, unknownCategory));
+    }
+
+    [Fact]
+    public void CreateProduct_NullName_ShouldNotThrowException()
+    {
+        var product = _creator.CreateProduct(null, 10.00m, Category.Book);
+
+        Assert.NotNull(product);
+        Assert.Null(product.GetName());
+    }
+
+    [Fact]
+    public void CreateProduct_EmptyName_ShouldNotThrowException()
+    {
+        var product = _creator.CreateProduct("", 10.00m, Category.Electronics);
+
+        Assert.NotNull(product);
+        Assert.Equal("", product.GetName());
+    }
+
+    [Theory]
+    [InlineData(-1)]
+    [InlineData(-0.01)]
+    public void CreateProduct_NegativePrice_ShouldNotThrowException(decimal price)
+    {
+        var product = _creator.CreateProduct("Test Product", price, Category.Furniture);
+
+        Assert.NotNull(product);
+        Assert.Equal(price, product.GetPrice());
+    }
+
+    [Fact]
+    public void CreateProduct_ZeroPrice_ShouldNotThrowException()
+    {
+        var product = _creator.CreateProduct("Free Product", 0m, Category.Book);
+
+        Assert.NotNull(product);
+        Assert.Equal(0m, product.GetPrice());
+    }
 }
