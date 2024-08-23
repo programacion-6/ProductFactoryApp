@@ -21,7 +21,7 @@ public class OrderServiceTests
 
         _orderService.AddProduct(book);
 
-        Assert.Contains(_orderService.GetProducts(), product => 
+        Assert.Contains(_orderService.GetProducts(), product =>
             product.GetCategory() == productCategory &&
             product.GetName() == ProductsMock._productName &&
             product.GetPrice() == ProductsMock._productPrice);
@@ -49,5 +49,53 @@ public class OrderServiceTests
         return (category, product);
     }
 
-    // TODO: Add for multiple
+    [Fact]
+    public void AddProduct_MultipleProducts_ShouldAddProductsToOrder()
+    {
+        var (productCategory, book) = GetProduct(Category.Book);
+        var (productCategory2, book2) = GetProduct(Category.Book);
+
+        _orderService.AddProduct(book);
+        _orderService.AddProduct(book2);
+
+        Assert.Contains(_orderService.GetProducts(), product =>
+            product.GetCategory() == productCategory &&
+            product.GetName() == ProductsMock._productName &&
+            product.GetPrice() == ProductsMock._productPrice);
+
+        Assert.Contains(_orderService.GetProducts(), product =>
+            product.GetCategory() == productCategory2 &&
+            product.GetName() == ProductsMock._productName &&
+            product.GetPrice() == ProductsMock._productPrice);
+    }
+
+    [Fact]
+    public void RemoveProduct_MultipleProducts_ShouldRemoveProductsFromOrder()
+    {
+        var (productCategory, book) = GetProduct(Category.Book);
+        var (productCategory2, book2) = GetProduct(Category.Book);
+
+        _orderService.AddProduct(book);
+        _orderService.AddProduct(book2);
+
+        _orderService.RemoveProduct(book);
+
+        Assert.Contains(_orderService.GetProducts(), product =>
+            product.GetCategory() == productCategory2 &&
+            product.GetName() == ProductsMock._productName &&
+            product.GetPrice() == ProductsMock._productPrice);
+
+        _orderService.RemoveProduct(book2);
+
+        Assert.DoesNotContain(_orderService.GetProducts(), product =>
+            product.GetCategory() == productCategory &&
+            product.GetName() == ProductsMock._productName &&
+            product.GetPrice() == ProductsMock._productPrice);
+
+        Assert.DoesNotContain(_orderService.GetProducts(), product =>
+            product.GetCategory() == productCategory2 &&
+            product.GetName() == ProductsMock._productName &&
+            product.GetPrice() == ProductsMock._productPrice);
+    }
+
 }

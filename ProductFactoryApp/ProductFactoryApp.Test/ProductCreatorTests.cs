@@ -22,5 +22,25 @@ public class ProductCreatorTests
         Assert.Equal(category, product.GetCategory());
     }
 
-    // TODO: Negative Scenarios 2
+    [Fact]
+    public void CreateProduct_NoProductCreated_ShouldNotContainInCollection()
+    {
+        var creator = new ProductCreator();
+        var orderService = new OrderService();
+
+        Assert.DoesNotContain(orderService.GetProducts(), p => p.GetName() == "Book");
+    }
+
+    [Fact]
+    public void RemoveProduct_ProductNotInOrder_ShouldNotContain()
+    {
+        var creator = new ProductCreator();
+        var orderService = new OrderService();
+
+        var product = creator.CreateProduct("Non-Existent Product", 99.99m, Category.Furniture);
+
+        orderService.RemoveProduct(product);
+
+        Assert.DoesNotContain(orderService.GetProducts(), p => p.GetName() == "Non-Existent Product");
+    }
 }
