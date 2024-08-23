@@ -22,14 +22,29 @@ public class ProductTests
     [Fact]
     public void Electronics_Initialized_ShouldBeInitializedCorrectly()
     {
-        // TODO: Complete test
-        Assert.True(true);
+        var name = "Test Electronics";
+        var price = 999.99m;
+
+        var electronics = new Electronics(name, price);
+
+        Assert.NotNull(electronics);
+        Assert.Equal(name, electronics.GetName());
+        Assert.Equal(price, electronics.GetPrice());
+        Assert.Equal(Category.Electronics, electronics.GetCategory());
     }
 
     [Fact]
     public void Furniture_Initialized_ShouldBeInitializedCorrectly()
     {
-        // TODO: Complete test
-        Assert.True(true);
+        var name = "Test Furniture";
+        var price = 199.99m;
+
+        var furniture = new Furniture(name, price);
+
+        Assert.NotNull(furniture);
+        Assert.Equal(name, furniture.GetName());
+        Assert.Equal(price, furniture.GetPrice());
+        Assert.Equal(Category.Furniture, furniture.GetCategory());
     }
+
 }
