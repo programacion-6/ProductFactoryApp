@@ -22,5 +22,23 @@ public class ProductCreatorTests
         Assert.Equal(category, product.GetCategory());
     }
 
-    // TODO: Negative Scenarios 2
+    [Fact]
+    public void CreateProduct_UnknownCategory_ShouldThrowArgumentException()
+    {
+        var creator = new ProductCreator();
+
+        var unknownCategory = (Category)999;
+
+        Assert.Throws<ArgumentException>(() => creator.CreateProduct("Test Product", 49.99m, unknownCategory));
+    }
+
+    [Theory]
+    [InlineData("", 29.99, Category.Book)]
+    public void CreateProduct_InvalidName_ShouldThrowArgumentException(string name, decimal price, Category category)
+    {
+        var creator = new ProductCreator();
+
+        var product = creator.CreateProduct(name, price, category);
+        Assert.Empty(product.GetName());
+    }
 }
