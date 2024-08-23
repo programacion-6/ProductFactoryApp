@@ -22,5 +22,28 @@ public class ProductCreatorTests
         Assert.Equal(category, product.GetCategory());
     }
 
-    // TODO: Negative Scenarios 2
+    [Fact]
+    public void CreateProduct_NegativePrice_ShouldThrowArgumentException()
+    {
+        var creator = new ProductCreator();
+
+        var exception = Assert.Throws<ArgumentException>(() =>
+            creator.CreateProduct("Invalid Product", -10.00m, Category.Book));
+
+        Assert.Equal("Price cannot be negative.", exception.Message);
+    }
+
+    [Theory]
+    [InlineData(null)]
+    [InlineData("")]
+    public void CreateProduct_InvalidName_ShouldThrowArgumentException(string invalidName)
+    {
+        var creator = new ProductCreator();
+
+        var exception = Assert.Throws<ArgumentException>(() =>
+            creator.CreateProduct(invalidName, 29.99m, Category.Book));
+
+        Assert.Equal("Product name cannot be null or empty.", exception.Message);
+    }
+
 }
