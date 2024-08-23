@@ -48,5 +48,52 @@ public class ProductCreatorTests
 
         Assert.Throws<ArgumentException>(() => creator.CreateProduct("Test Invalid", 29.99m, invalidCategory));
     }
+    
+    [Theory]
+    [InlineData(null, -1, (Category)0)]
+    [InlineData("", 0, (Category)0)]
+    public void CreateProduct_AllInvalidParameters_ShouldNotThrowException(string name, decimal price,
+        Category category)
+    {
+        var creator = new ProductCreator();
+
+        var product = creator.CreateProduct(name, price, category);
+
+        Assert.NotNull(product);
+        Assert.Equal(name, product.GetName());
+        Assert.Equal(price, product.GetPrice());
+        Assert.Equal(category, product.GetCategory());
+    }
+
+    [Theory]
+    [InlineData("!@#$%^&*()", 19.99, Category.Book)]
+    [InlineData("1234567890", 19.99, Category.Electronics)]
+    public void CreateProduct_NameWithSpecialCharacters_ShouldNotThrowException(string name, decimal price,
+        Category category)
+    {
+        var creator = new ProductCreator();
+
+        var product = creator.CreateProduct(name, price, category);
+
+        Assert.NotNull(product);
+        Assert.Equal(name, product.GetName());
+        Assert.Equal(price, product.GetPrice());
+        Assert.Equal(category, product.GetCategory());
+    }
+    
+    [Fact]
+    public void CreateProduct_WithExtremelyLongName_ShouldNotThrowException()
+    {
+        var creator = new ProductCreator();
+
+        var longName = new string('A', 1000);
+
+        var product = creator.CreateProduct(longName, 29.99m, Category.Book);
+
+        Assert.NotNull(product);
+        Assert.Equal(longName, product.GetName());
+        Assert.Equal(29.99m, product.GetPrice());
+        Assert.Equal(Category.Book, product.GetCategory());
+    }
 
 }
