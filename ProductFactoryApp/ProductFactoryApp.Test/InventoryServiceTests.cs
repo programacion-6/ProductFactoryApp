@@ -38,4 +38,5 @@ public class InventoryServiceTests
         Assert.Single(lowStockProducts);
         Assert.Equal(book, lowStockProducts.First());
     }
+    
 }
