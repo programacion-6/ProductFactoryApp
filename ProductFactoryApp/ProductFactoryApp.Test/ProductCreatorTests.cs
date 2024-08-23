@@ -22,5 +22,26 @@ public class ProductCreatorTests
         Assert.Equal(category, product.GetCategory());
     }
 
-    // TODO: Negative Scenarios 2
+    [Fact]
+    public void CreateProduct_InvalidCategory_ShouldThrowArgumentOutOfRangeException()
+    {
+        var creator = new ProductCreator();
+
+        var invalidCategory = (Category) 10;
+
+        Assert.Throws<ArgumentException>(
+            () => creator.CreateProduct("Test Product", 29, invalidCategory)
+        );
+    }
+
+    [Fact]
+    public void CreateProduct_NullName_ShouldReturnProductWithNullName()
+    {
+        var creator = new ProductCreator();
+
+        var product = creator.CreateProduct(null, 29.99m, Category.Book);
+
+        Assert.NotNull(product);
+        Assert.Null(product.GetName());
+    }
 }
