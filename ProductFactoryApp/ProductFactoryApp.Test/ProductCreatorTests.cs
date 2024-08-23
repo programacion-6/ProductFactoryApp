@@ -22,5 +22,35 @@ public class ProductCreatorTests
         Assert.Equal(category, product.GetCategory());
     }
 
-    // TODO: Negative Scenarios 2
+    [Fact]
+    public void CreateProduct_InvalidCategory_ShouldThrowArgumentException()
+    {
+        var creator = new ProductCreator();
+        
+        Assert.Throws<ArgumentException>(() => creator.CreateProduct("Test Invalid", 50.0m, (Category)999));
+    }
+
+    [Fact]
+    public void CreateProduct_NullName_ShouldThrowArgumentNullException()
+    {
+        var creator = new ProductCreator();
+
+        Assert.Throws<ArgumentNullException>(() => creator.CreateProduct(null, 29.99m, Category.Book));
+    }
+
+    [Fact]
+    public void CreateProduct_NegativePrice_ShouldThrowArgumentOutOfRangeException()
+    {
+        var creator = new ProductCreator();
+
+        Assert.Throws<ArgumentOutOfRangeException>(() => creator.CreateProduct("Test Negative Price", -10.0m, Category.Book));
+    }
+
+    [Fact]
+    public void CreateProduct_ZeroPrice_ShouldThrowArgumentOutOfRangeException()
+    {
+        var creator = new ProductCreator();
+
+        Assert.Throws<ArgumentOutOfRangeException>(() => creator.CreateProduct("Test Zero Price", 0.0m, Category.Book));
+    }
 }
