@@ -22,5 +22,16 @@ public class ProductCreatorTests
         Assert.Equal(category, product.GetCategory());
     }
 
-    // TODO: Negative Scenarios 2
+    // TODO: Negative Scenarios
+
+    [Fact]
+    public void CreateProduct_UnknownCategory_ShouldThrowArgumentExceptionWithMessage()
+    {
+        var creator = new ProductCreator();
+        var unknownCategory = (Category)999;
+
+        var exception = Assert.Throws<ArgumentException>(() => creator.CreateProduct("Test Unknown", 19.99m, unknownCategory));
+
+        Assert.Equal("Unknown product category.", exception.Message);
+    }
 }
